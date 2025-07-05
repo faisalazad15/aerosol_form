@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aerosol Solutions – Lead Capture</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #000000aa 0%, #0050b3aa 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 40px 20px 10px;
+      text-align: center;
+    }
+    header img {
+      max-width: 120px;
+      height: auto;
+      margin: 0 auto 10px;
+    }
+    header h1 {
+      font-size: 24px;
+      color: white;
+    }
+    main {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 20px;
+    }
+    .form-container, .thank-you-container {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 30px 40px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 5px;
+      text-align: left;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      background: #ffffffdd;
+      color: #000;
+      font-size: 14px;
+    }
+    .product-group {
+      margin-bottom: 20px;
+    }
+    .product-entry {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .product-entry select, .product-entry input {
+      flex: 1;
+    }
+    button, .back-btn {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button:hover, .back-btn:hover {
+      background: #0056b3;
+    }
+    .add-btn {
+      margin-bottom: 20px;
+      font-size: 14px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: underline;
+      color: #0d47a1;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #0d47a1;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="627a0e5ea87d1.png" alt="Aerosol Solutions Inc. Logo" />
+    <h1>Aerosol Solutions Inc.</h1>
+  </header>
+  <main>
+    <div class="form-container" id="form-section">
+      <h2>Get Our Catalogue</h2>
+      <form id="catalogue-form" action="https://script.google.com/macros/s/AKfycbwbkjWALcNQqzslwWDeq1BC9jqvbWbY9_s5VBbQgeUBofEI6NEpqAEjKNGtTS9KpCEc/exec" method="POST">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" required />
+
+        <label for="company">Company Name</label>
+        <input type="text" id="company" name="company" required />
+
+        <label for="industry">Industry</label>
+        <select id="industry" name="industry[]" multiple size="3">
+          <option value="Perfume">Perfume</option>
+          <option value="Aerosol">Aerosol</option>
+          <option value="Cosmetic">Cosmetic</option>
+        </select>
+
+        <label>Your Interested Products & Monthly Consumption</label>
+        <div id="product-group" class="product-group">
+          <div class="product-entry">
+            <select name="product[]">
+              <option value="Valves">Valves</option>
+              <option value="Actuators">Actuators</option>
+              <option value="Crimp Pumps">Crimp Pumps</option>
+              <option value="Push Pumps">Push Pumps</option>
+              <option value="Mist Pumps">Mist Pumps</option>
+              <option value="PET Bottles">PET Bottles</option>
+              <option value="Card Sprays">Card Sprays</option>
+              <option value="Testers">Testers</option>
+              <option value="Other">Other</option>
+            </select>
+            <input type="text" name="consumption[]" placeholder="Monthly Consumption" />
+          </div>
+        </div>
+        <div class="add-btn" id="add-product">+ Add Another Product</div>
+
+        <input type="hidden" id="products-summary" name="products_summary" />
+        <button type="submit">Send Catalogue</button>
+      </form>
+    </div>
+
+    <div class="thank-you-container" id="thank-you-section" style="display:none;">
+      <h2>Thank You!</h2>
+      <p>Your information has been submitted successfully.<br> We’ll be sending your catalogue shortly.</p>
+      <a class="back-btn" href="#" onclick="returnToForm()">Back to Form</a>
+    </div>
+  </main>
+  <footer>
+    &copy; 2025 Aerosol Solutions Inc. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById("catalogue-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const productEntries = document.querySelectorAll('.product-entry');
+      const summary = [];
+      productEntries.forEach(entry => {
+        const product = entry.querySelector('select').value;
+        const consumption = entry.querySelector('input').value;
+        if (product || consumption) {
+          summary.push(`${product} - ${consumption}`);
+        }
+      });
+      document.getElementById('products-summary').value = summary.join(', ');
+
+      const formData = new FormData(form);
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", form.action, true);
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          document.getElementById("form-section").style.display = "none";
+          document.getElementById("thank-you-section").style.display = "block";
+          form.reset();
+        } else {
+          alert("Error submitting form. Please try again.");
+        }
+      };
+      xhr.send(formData);
+    });
+
+    document.getElementById("add-product").addEventListener("click", function () {
+      const container = document.getElementById('product-group');
+      const div = document.createElement('div');
+      div.className = 'product-entry';
+      div.innerHTML = `
+        <select name="product[]">
+          <option value="Valves">Valves</option>
+          <option value="Actuators">Actuators</option>
+          <option value="Crimp Pumps">Crimp Pumps</option>
+          <option value="Push Pumps">Push Pumps</option>
+          <option value="Mist Pumps">Mist Pumps</option>
+          <option value="PET Bottles">PET Bottles</option>
+          <option value="Card Sprays">Card Sprays</option>
+          <option value="Testers">Testers</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" name="consumption[]" placeholder="Monthly Consumption" />
+      `;
+      container.appendChild(div);
+    });
+
+    function returnToForm() {
+      document.getElementById('thank-you-section').style.display = 'none';
+      document.getElementById('form-section').style.display = 'block';
+      return false;
+    }
+  </script>
+</body>
+</html>
